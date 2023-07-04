@@ -1,5 +1,4 @@
 # -SQL-
-- SQL스터디
 
 <img width="347" alt="스크린샷 2023-07-04 오후 8 43 18" src="https://github.com/hozyhozy/-SQL-/assets/123252821/4ab8eca1-7b32-49ba-9cd8-967ce364c8dd">
 
