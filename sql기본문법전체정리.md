@@ -77,7 +77,7 @@ FROM daily
   - CASE WHEN THEN END
  
     
-''' sql
+``` sql
 (CASE WHEN time = 'Lunch' THEN total_bill END) lunch
 IF(time = 'Dinner', total_bill, null) dinner 
 ```
