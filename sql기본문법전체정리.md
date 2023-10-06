@@ -1,0 +1,94 @@
+# 1. GROUP BY
+- 조건은 **HAVING**에서 처리한다.
+- select부분은 집계로 나와야함
+
+# 2. 단일행 서브쿼리
+- 부등호 쓴다 <. >, =, <=, >=
+
+  
+``` sql
+SELECT *
+FROM tips
+WHERE total_bill > (SELECT AVG(total_bill) FROM tips)
+```
+
+# 3. 다중행 서브쿼리
+- in, not in 쓴다
+- 조건이 하나가 아닌 여러개일 경우
+  
+``` sql
+SELECT *
+FROM tips
+WHERE day IN ('Sun', 'Sat')
+
+SELECT *
+FROM tips
+WHERE day IN (
+  SELECT day
+  FROM tips
+  GROUP BY day
+  HAVING SUM(total_bill) >= 1500
+) -- 서브쿼리의 결과값은 컬럼 1개, 로우 N개
+```
+
+# 4. 다중컬럼서브쿼리
+- 원하는 조건의 행들을 모든 열을 뽑아 오고 싶을때
+``` sql
+SELECT *
+FROM tips
+WHERE (day, total_bill) IN (
+  SELECT day, MAX(total_bill)
+  FROM tips
+  GROUP BY day
+)
+```
+
+# 5. FROM 서브쿼리
+- 테이블을 새로 만든다고 생각하기
+- WITH 또는 서브쿼리 편한대로 사용하기
+  - WITH (일시적으로 만드는 것임): WITH 테이블명 AS (서브쿼리)
+  - 서브쿼리: 무조건 as 테이블명 써야함
+
+```sql
+SELECT ROUND(AVG(daily.sales), 2) daily_sales_avg
+FROM (
+  SELECT day
+       , SUM(total_bill) sales
+  FROM tips
+  GROUP BY day
+) AS daily
+
+
+WITH daily AS (
+  SELECT day
+       , SUM(total_bill) sales
+  FROM tips
+  GROUP BY day
+)
+
+SELECT ROUND(AVG(daily.sales), 2) daily_sales_avg
+FROM daily
+```
+
+
+#### 이외의 문법
+- 조건
+  - IF (조건, TRUE일 경우 반환, False일 경우 반환)
+  - CASE WHEN THEN END
+ 
+    
+''' sql
+(CASE WHEN time = 'Lunch' THEN total_bill END) lunch
+IF(time = 'Dinner', total_bill, null) dinner 
+```
+
+- 날짜 포맷
+  - DATE() --> 무조건 2017-01-01 이런식으로 반환됨
+  - DATE_FORMAT( 입력, '%Y-%m-%d)
+
+- NULL
+  - IS NOT NULL: null 값이 아닌거
+
+- 날짜 사이 뽑을 때
+  - BETWEEN A and B
+
