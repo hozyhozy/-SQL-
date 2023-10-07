@@ -93,6 +93,34 @@ ORDER BY
   t.total_bill DESC;
 ```
 
+
+# 상관쿼리
+- 자기자신을 또 다른 테이블로 만드는 쿼리
+- 요새는 window함수가 있어서 거의 사용하지 않으나 코테 문제에 간혹 나오는 경우가 있어 숙지가 필요함
+  - 이동평균: DATE_ADD(기준열, INTERVAL 1 DAY), DATE_SUB(기준열, INTERVAL 1 DAY)
+  - 누적합계산하기:
+    
+``` sql
+-- 이동평균
+SELECT 
+  measured_at,
+  pm10,
+  (SELECT AVG(m2.pm10) FROM measurements m2 WHERE m2.measured_at BETWEEN DATE_SUB(m1.measured_at, INTERVAL 1 DAY) AND DATE_ADD(m1.measured_at, INTERVAL 1 DAY)) AS pm10_runnung_average
+FROM measurements m1 
+-- 행 하나만 생각하기
+
+-- 누적합계산하기
+SELECT 
+  measured_at,
+  pm10,
+  (SELECT SUM(m2.pm10) FROM measurements m2 WHERE m2.measured_at <= m1.measured_at) AS pm10_runnung_total
+FROM measurements m1 
+-- 행 하나만 생각하기
+```
+
+=============================================================
+
+
 ## 예시 서브쿼리
 ``` sql
 -- Q. 전체 total_bill 합에서 total_bill의 퍼센트 구하기
@@ -104,9 +132,25 @@ SELECT
 FROM tips
 ORDER BY total_bill DESC;
 ```
-
-=============================================================
-
+``` sql
+-- Q. 각 사이즈별로 가장 큰 금액 추출
+SELECT
+  *
+FROM
+  tips
+WHERE
+  (size, total_bill) IN (
+    SELECT
+      size,
+      MAX(total_bill)
+    FROM
+      tips
+    GROUP BY
+      size
+  )
+ORDER BY
+  size;
+```
 
 ## 이외의 문법
 - 조건
