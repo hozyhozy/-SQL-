@@ -70,8 +70,33 @@ SELECT ROUND(AVG(daily.sales), 2) daily_sales_avg
 FROM daily
 ```
 
+# 6.JOIN _ 이부분 더 공부해서 수정하기
+- INNER JOIN
+- OUTER JOIN
+``` sql
+WITH totalbill_by_day AS (
+  SELECT
+    SUM(total_bill) total_bill_sum,
+    day
+  FROM tips
+  GROUP BY day)
 
-#### 이외의 문법
+SELECT
+  t.day,
+  t.total_bill,
+  round(t.total_bill/td.total_bill_sum*100,2) pct
+FROM 
+  tips t 
+INNER JOIN totalbill_by_day td
+  ON td.day = t.day
+ORDER BY
+  t.total_bill DESC;
+```
+
+=============================================================
+
+
+## 이외의 문법
 - 조건
   - IF (조건, TRUE일 경우 반환, False일 경우 반환)
   - CASE WHEN THEN END
