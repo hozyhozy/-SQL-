@@ -93,6 +93,18 @@ ORDER BY
   t.total_bill DESC;
 ```
 
+## 예시 서브쿼리
+``` sql
+-- Q. 전체 total_bill 합에서 total_bill의 퍼센트 구하기
+
+SELECT 
+  day,
+  total_bill,
+  round(total_bill / (SELECT SUM(total_bill) FROM tips)*100,2) AS pct 
+FROM tips
+ORDER BY total_bill DESC;
+```
+
 =============================================================
 
 
