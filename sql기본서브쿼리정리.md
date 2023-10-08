@@ -1,6 +1,7 @@
 # 1. GROUP BY
 - 조건은 **HAVING**에서 처리한다.
 - select부분은 집계로 나와야함
+- group by customer_id 하면, customer_id는 Unique함
 
 # 2. 단일행 서브쿼리
 - 부등호 쓴다 <. >, =, <=, >=
